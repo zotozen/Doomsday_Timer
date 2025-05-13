@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown to the Phoenix Event</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        /* --- Global Styles & Resets --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevents scrolling */
+            font-family: 'Orbitron', sans-serif; /* Dramatic sci-fi font */
+            color: #fff; /* Default text color */
+            background-color: #000; /* Fallback background */
+        }
+
+        /* --- Background & Overlay --- */
+        body {
+            /* You can replace this URL with a specific apocalyptic image */
+            background-image: url('https://images.unsplash.com/photo-1504333638930-c8787321eee0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Full-screen fixed background */
+            position: relative; /* For overlay positioning */
+            display: flex; /* Using flexbox to center content */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Subtle black overlay */
+            z-index: 1; /* Ensure overlay is above background but below content */
+        }
+
+        /* --- Main Content Container --- */
+        main {
+            position: relative; /* To ensure content is above the overlay */
+            z-index: 2;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure it takes full viewport height */
+            opacity: 0; /* Initial state for page load animation */
+            animation: fadeInPage 1.5s ease-out forwards;
+            animation-delay: 0.5s; /* Slight delay for effect */
+        }
+
+        @keyframes fadeInPage {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* --- Typography & Titles --- */
+        h1 {
+            font-family: 'Bebas Neue', cursive; /* More dramatic for main title */
+            font-size: 4rem; /* Big and bold */
+            font-weight: 700;
+            margin-bottom: 0.25em;
+            color: #ff6347; /* Fiery orange/red */
+            text-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500, 0 0 30px #ff8c00, 0 0 5px #000, 0 0 70px rgba(255,100,0,0.7); /* Enhanced Glowing effect */
+            animation: pulseTitle 2.5s infinite alternate ease-in-out;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        h1:hover {
+            transform: scale(1.03);
+            text-shadow: 0 0 15px #ff4500, 0 0 25px #ff4500, 0 0 35px #ff8c00, 0 0 8px #000, 0 0 80px rgba(255,100,0,0.8);
+        }
+
+        @keyframes pulseTitle {
+            from {
+                text-shadow: 0 0 8px #ff4500, 0 0 18px #ff4500, 0 0 28px #ff8c00, 0 0 4px #000, 0 0 60px rgba(255,100,0,0.6);
+                opacity: 0.9;
+            }
+            to {
+                text-shadow: 0 0 12px #ff6347, 0 0 22px #ff6347, 0 0 32px #ffa07a, 0 0 6px #111, 0 0 75px rgba(255,100,0,0.75);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 2em;
+            color: #ccc;
+            text-shadow: 0 0 5px #ff4500, 0 0 2px #000;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        h2:hover {
+            color: #fff;
+            text-shadow: 0 0 8px #ff4500, 0 0 4px #000;
+        }
+
+        /* --- Countdown Timer --- */
+        #countdown-timer {
+            display: grid;
+            /* 6 columns for years, months, days, hours, minutes, seconds */
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 15px; /* Space between timer units */
+            width: 100%;
+            max-width: 800px; /* Max width for larger screens */
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .timer-unit {
+            background-color: rgba(10, 0, 0, 0.5); /* Darker, more thematic background */
+            padding: 20px 10px;
+            border-radius: 10px; /* Slightly more rounded */
+            border: 1px solid rgba(255, 69, 0, 0.6); /* Orange border */
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.4), inset 0 0 8px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, background-color 0.3s ease;
+            opacity: 0; /* Initial state for staggered load animation */
+            transform: translateY(20px); /* Initial state for staggered load animation */
+            animation: popInUnit 0.5s ease-out forwards;
+        }
+
+        /* Staggered animation for timer units */
+        .timer-unit:nth-child(1) { animation-delay: 0.8s; }
+        .timer-unit:nth-child(2) { animation-delay: 0.9s; }
+        .timer-unit:nth-child(3) { animation-delay: 1.0s; }
+        .timer-unit:nth-child(4) { animation-delay: 1.1s; }
+        .timer-unit:nth-child(5) { animation-delay: 1.2s; }
+        .timer-unit:nth-child(6) { animation-delay: 1.3s; }
+
+
+        @keyframes popInUnit {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timer-unit:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(255, 69, 0, 0.6), inset 0 0 10px rgba(0,0,0,0.8);
+            background-color: rgba(30, 0, 0, 0.7);
+        }
+
+        .timer-value {
+            font-size: 2.5rem; /* Large timer numbers */
+            font-weight: 700;
+            display: block;
+            line-height: 1.1;
+            color: #ff8c00; /* Brighter orange for numbers */
+            text-shadow: 0 0 5px #ff4500, 0 0 10px #ff4500;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #bbb; /* Lighter gray for labels */
+            display: block;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+
+        /* Tablets and smaller desktops */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 3.2rem; /* Adjusted for better fit */
+            }
+            h2 {
+                font-size: 1.5rem; /* Adjusted */
+            }
+            .timer-value {
+                font-size: 2rem;
+            }
+            #countdown-timer {
+                grid-template-columns: repeat(3, 1fr); /* Stack in 2 rows */
+                gap: 12px;
+                max-width: 550px; /* Adjusted */
+            }
+            .timer-unit {
+                padding: 15px 8px;
+            }
+        }
+
+        /* Phones */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem; /* Further adjustment */
+            }
+            h2 {
+                font-size: 1.2rem; /* Further adjustment */
+                margin-bottom: 1.5em;
+            }
+            #countdown-timer {
+                grid-template-columns: repeat(2, 1fr); /* Stack in 3 rows */
+                gap: 10px;
+                max-width: 360px; /* Adjusted for 2 columns */
+            }
+            .timer-value {
+                font-size: 1.8rem;
+            }
+            .timer-label {
+                font-size: 0.7rem;
+            }
+            .timer-unit {
+                padding: 12px 5px;
+            }
+        }
+
+         /* Smaller Phones */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem; /* Smallest size for title */
+            }
+            h2 {
+                font-size: 1rem; /* Smallest size for subtitle */
+            }
+            #countdown-timer {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                max-width: 300px; /* Ensure fits well */
+            }
+            .timer-value {
+                font-size: 1.5rem;
+            }
+            .timer-label {
+                font-size: 0.65rem;
+            }
+             .timer-unit {
+                padding: 10px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Countdown to the Phoenix Event</h1>
+            <h2>End of the World Countdown Clock</h2>
+        </header>
+        <section id="countdown-timer" aria-label="Time remaining until the Phoenix Event">
+            <div class="timer-unit">
+                <span class="timer-value" id="years">00</span>
+                <span class="timer-label">Years</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-value" id="months">00</span>
+                <span class="timer-label">Months</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-value" id="days">00</span>
+                <span class="timer-label">Days</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-value" id="hours">00</span>
+                <span class="timer-label">Hours</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-value" id="minutes">00</span>
+                <span class="timer-label">Minutes</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-value" id="seconds">00</span>
+                <span class="timer-label">Seconds</span>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- CONFIGURATION ---
+        // Set the target date for the countdown: May 16, 2040, 00:00:00 UTC
+        // JavaScript months are 0-indexed (January is 0, May is 4)
+        // Using UTC to ensure consistency across timezones for the event
+        const targetDate = new Date(Date.UTC(2040, 4, 16, 0, 0, 0)).getTime();
+
+        // --- DOM ELEMENTS ---
+        const yearsEl = document.getElementById('years');
+        const monthsEl = document.getElementById('months');
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        const countdownTimerEl = document.getElementById('countdown-timer');
+
+        // --- COUNTDOWN FUNCTION ---
+        function updateCountdown() {
+            const now = new Date().getTime();
+            let timeLeft = targetDate - now;
+
+            if (timeLeft < 0) {
+                // Event has passed or is happening now
+                if (countdownTimerEl) {
+                    countdownTimerEl.innerHTML = "<p style='grid-column: 1 / -1; font-size: 1.5rem; color: #ff4500; text-shadow: 0 0 10px #ff0000; padding: 20px 0;'>The Phoenix Event is upon us!</p>";
+                }
+                clearInterval(countdownInterval); // Stop the timer
+                return;
+            }
+
+            // Calculate years, months, days, hours, minutes, seconds
+            // This approach provides a more accurate representation of years and months remaining.
+
+            let currentDate = new Date();
+            let target = new Date(targetDate);
+
+            let years = target.getUTCFullYear() - currentDate.getUTCFullYear();
+            let months = target.getUTCMonth() - currentDate.getUTCMonth();
+            let days = target.getUTCDate() - currentDate.getUTCDate();
+            let hours = target.getUTCHours() - currentDate.getUTCHours();
+            let minutes = target.getUTCMinutes() - currentDate.getUTCMinutes();
+            let seconds = target.getUTCSeconds() - currentDate.getUTCSeconds();
+
+            // Adjust for negative values by borrowing from higher units
+            if (seconds < 0) {
+                seconds += 60;
+                minutes--;
+            }
+            if (minutes < 0) {
+                minutes += 60;
+                hours--;
+            }
+            if (hours < 0) {
+                hours += 24;
+                days--;
+            }
+            if (days < 0) {
+                // Borrow days from the previous month
+                // Get the last day of the previous month relative to the target
+                let lastMonth = new Date(target.getUTCFullYear(), target.getUTCMonth(), 0);
+                days += lastMonth.getUTCDate();
+                months--;
+            }
+            if (months < 0) {
+                months += 12;
+                years--;
+            }
+
+
+            // --- UPDATE DOM ---
+            // Add leading zeros if needed and update the elements
+            // Ensure elements exist before trying to set textContent
+            if (yearsEl) yearsEl.textContent = String(years < 0 ? 0 : years).padStart(2, '0');
+            if (monthsEl) monthsEl.textContent = String(months < 0 ? 0 : months).padStart(2, '0');
+            if (daysEl) daysEl.textContent = String(days < 0 ? 0 : days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours < 0 ? 0 : hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes < 0 ? 0 : minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds < 0 ? 0 : seconds).padStart(2, '0');
+        }
+
+        // --- INITIALIZE & INTERVAL ---
+        // Run the function once immediately to populate the timer and avoid delay
+        updateCountdown();
+
+        // Update the countdown every second
+        const countdownInterval = setInterval(updateCountdown, 1000);
+
+        // --- Page Load Animation Trigger ---
+        // CSS handles the main fade-in and timer unit pop-ins.
+        // This script ensures the countdown logic starts after the DOM is ready.
+        document.addEventListener('DOMContentLoaded', () => {
+            // console.log('Phoenix Event Countdown Initialized and Ready.');
+        });
+    </script>
+</body>
+</html>
